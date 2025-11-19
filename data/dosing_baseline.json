@@ -1,118 +1,129 @@
 {
   "ibuprofen": {
     "name": "Ibuprofen",
-    "adult": {"min_mg_per_dose": 200, "max_mg_per_dose": 800, "freq_per_day_min": 3, "freq_per_day_max": 4},
-    "pediatric_mg_per_kg_per_day": {"min": 10, "max": 30}
+    "adult": { "min_mg_per_dose": 200, "max_mg_per_dose": 800, "freq_per_day_min": 3, "freq_per_day_max": 4 },
+    "pediatric_mg_per_kg_per_day": { "min": 10, "max": 30 }
   },
+
   "aspirin": {
     "name": "Aspirin",
-    "adult": {"min_mg_per_dose": 75, "max_mg_per_dose": 650, "freq_per_day_min": 1, "freq_per_day_max": 4},
-    "pediatric_mg_per_kg_per_day": {"min": 10, "max": 50}
+    "adult": { "min_mg_per_dose": 75, "max_mg_per_dose": 650, "freq_per_day_min": 1, "freq_per_day_max": 4 },
+    "pediatric_mg_per_kg_per_day": { "min": 10, "max": 50 }
   },
+
   "paracetamol": {
     "name": "Paracetamol",
-    "adult": {"min_mg_per_dose": 500, "max_mg_per_dose": 1000, "freq_per_day_min": 3, "freq_per_day_max": 4},
-    "pediatric_mg_per_kg_per_day": {"min": 10, "max": 15}
+    "adult": { "min_mg_per_dose": 500, "max_mg_per_dose": 1000, "freq_per_day_min": 3, "freq_per_day_max": 4 },
+    "pediatric_mg_per_kg_per_day": { "min": 10, "max": 15 }
   },
+
   "amoxicillin": {
     "name": "Amoxicillin",
-    "adult": {"min_mg_per_dose": 250, "max_mg_per_dose": 1000, "freq_per_day_min": 2, "freq_per_day_max": 3},
-    "pediatric_mg_per_kg_per_day": {"min": 20, "max": 50}
+    "adult": { "min_mg_per_dose": 250, "max_mg_per_dose": 1000, "freq_per_day_min": 2, "freq_per_day_max": 3 },
+    "pediatric_mg_per_kg_per_day": { "min": 20, "max": 50 }
   },
+
   "ciprofloxacin": {
     "name": "Ciprofloxacin",
-    "adult": {"min_mg_per_dose": 250, "max_mg_per_dose": 750, "freq_per_day_min": 1, "freq_per_day_max": 2},
-    "pediatric_mg_per_kg_per_day": {"min": 10, "max": 20}
+    "adult": { "min_mg_per_dose": 250, "max_mg_per_dose": 750, "freq_per_day_min": 1, "freq_per_day_max": 2 },
+    "pediatric_mg_per_kg_per_day": { "min": 10, "max": 20 }
   },
+
   "doxycycline": {
     "name": "Doxycycline",
-    "adult": {"min_mg_per_dose": 100, "max_mg_per_dose": 200, "freq_per_day_min": 1, "freq_per_day_max": 2},
-    "pediatric_mg_per_kg_per_day": {"min": 2, "max": 4}
+    "adult": { "min_mg_per_dose": 100, "max_mg_per_dose": 200, "freq_per_day_min": 1, "freq_per_day_max": 2 },
+    "pediatric_mg_per_kg_per_day": { "min": 2, "max": 4 }
   },
+
   "metformin": {
     "name": "Metformin",
-    "adult": {"min_mg_per_dose": 500, "max_mg_per_dose": 1000, "freq_per_day_min": 1, "freq_per_day_max": 3}
+    "adult": { "min_mg_per_dose": 500, "max_mg_per_dose": 1000, "freq_per_day_min": 1, "freq_per_day_max": 3 }
   },
+
   "atorvastatin": {
     "name": "Atorvastatin",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 80, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 10, "max_mg_per_dose": 80, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "omeprazole": {
     "name": "Omeprazole",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 40, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 10, "max_mg_per_dose": 40, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "salbutamol": {
     "name": "Salbutamol",
-    "adult": {"min_mg_per_dose": 100, "max_mg_per_dose": 400, "freq_per_day_min": 1, "freq_per_day_max": 4},
-    "pediatric_mg_per_kg_per_day": {"min": 0.1, "max": 0.15}
+    "adult": { "min_mg_per_dose": 100, "max_mg_per_dose": 400, "freq_per_day_min": 1, "freq_per_day_max": 4 },
+    "pediatric_mg_per_kg_per_day": { "min": 0.1, "max": 0.15 }
   },
+
   "loratadine": {
     "name": "Loratadine",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 10, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "cetirizine": {
     "name": "Cetirizine",
-    "adult": {"min_mg_per_dose": 5, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 5, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "warfarin": {
     "name": "Warfarin",
-    "adult": {"min_mg_per_dose": 1, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 1, "max_mg_per_dose": 10, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "clopidogrel": {
     "name": "Clopidogrel",
-    "adult": {"min_mg_per_dose": 75, "max_mg_per_dose": 300, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 75, "max_mg_per_dose": 300, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "insulin": {
     "name": "Insulin",
-    "adult": {"min_mg_per_dose": 1, "max_mg_per_dose": 50, "freq_per_day_min": 1, "freq_per_day_max": 4}
+    "adult": { "min_mg_per_dose": 1, "max_mg_per_dose": 50, "freq_per_day_min": 1, "freq_per_day_max": 4 }
   },
+
   "levothyroxine": {
     "name": "Levothyroxine",
-    "adult": {"min_mg_per_dose": 25, "max_mg_per_dose": 200, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 25, "max_mg_per_dose": 200, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "prednisone": {
     "name": "Prednisone",
-    "adult": {"min_mg_per_dose": 5, "max_mg_per_dose": 60, "freq_per_day_min": 1, "freq_per_day_max": 4},
-    "pediatric_mg_per_kg_per_day": {"min": 0.1, "max": 2}
+    "adult": { "min_mg_per_dose": 5, "max_mg_per_dose": 60, "freq_per_day_min": 1, "freq_per_day_max": 4 },
+    "pediatric_mg_per_kg_per_day": { "min": 0.1, "max": 2 }
   },
+
   "furosemide": {
     "name": "Furosemide",
-    "adult": {"min_mg_per_dose": 20, "max_mg_per_dose": 80, "freq_per_day_min": 1, "freq_per_day_max": 3}
+    "adult": { "min_mg_per_dose": 20, "max_mg_per_dose": 80, "freq_per_day_min": 1, "freq_per_day_max": 3 }
   },
+
   "azithromycin": {
     "name": "Azithromycin",
-    "adult": {"min_mg_per_dose": 250, "max_mg_per_dose": 500, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 250, "max_mg_per_dose": 500, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "amitriptyline": {
     "name": "Amitriptyline",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 150, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 10, "max_mg_per_dose": 150, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "simvastatin": {
     "name": "Simvastatin",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 40, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 10, "max_mg_per_dose": 40, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "hydrochlorothiazide": {
     "name": "Hydrochlorothiazide",
-    "adult": {"min_mg_per_dose": 12.5, "max_mg_per_dose": 50, "freq_per_day_min": 1, "freq_per_day_max": 1}
+    "adult": { "min_mg_per_dose": 12.5, "max_mg_per_dose": 50, "freq_per_day_min": 1, "freq_per_day_max": 1 }
   },
+
   "metronidazole": {
     "name": "Metronidazole",
-    "adult": {"min_mg_per_dose": 250, "max_mg_per_dose": 500, "freq_per_day_min": 2, "freq_per_day_max": 3}
+    "adult": { "min_mg_per_dose": 250, "max_mg_per_dose": 500, "freq_per_day_min": 2, "freq_per_day_max": 3 }
   },
+
   "tramadol": {
     "name": "Tramadol",
-    "adult": {"min_mg_per_dose": 50, "max_mg_per_dose": 100, "freq_per_day_min": 1, "freq_per_day_max": 4}
-  },
-  "omeprazole": {
-    "name": "Omeprazole",
-    "adult": {"min_mg_per_dose": 10, "max_mg_per_dose": 40, "freq_per_day_min": 1, "freq_per_day_max": 1}
-  },
-  "azithromycin": {
-    "name": "Azithromycin",
-    "adult": {"min_mg_per_dose": 250, "max_mg_per_dose": 500, "freq_per_day_min": 1, "freq_per_day_max": 1}
-  },
-  "insulin": {
-    "name": "Insulin",
-    "adult": {"min_mg_per_dose": 1, "max_mg_per_dose": 50, "freq_per_day_min": 1, "freq_per_day_max": 4}
+    "adult": { "min_mg_per_dose": 50, "max_mg_per_dose": 100, "freq_per_day_min": 1, "freq_per_day_max": 4 }
   }
 }
