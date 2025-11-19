@@ -11,27 +11,29 @@
 - Dosage-aware evaluation (adult + pediatric mg/kg/day)  
 - ML-adjusted risk scoring  
 - Minimalistic centered UI  
-- Card-based drug entry  
-- Export results to CSV and PDF  
-- Cloud deployment with Flask & Render  
+- Card-based drug entry system  
+- CSV & PDF export  
+- Cloud deployment using Flask + Render  
 
 ---
 
 ## 🧠 How It Works
 
 1. User enters two or more drugs  
-2. For each drug, the user provides:
+2. For each drug, the system accepts:
    - Dose
-   - Unit (mg, g, mL, mcg, IU)
+   - Unit (mg, g, mcg, mL, IU)
    - Frequency per day
-   - Route of administration
-3. Pediatric mode enables mg/kg/day dosage checking  
-4. ML model predicts interaction probability  
-5. Dosage rules escalate or reduce risk  
-6. Final risk displayed:
-   - Low
-   - Moderate
-   - High
+   - Route of administration  
+3. Pediatric mode (optional):
+   - Requires weight input  
+   - Performs mg/kg/day dosage evaluation  
+4. ML model computes interaction probability  
+5. Dosage rules adjust risk level  
+6. Final output shows:
+   - Low / Moderate / High risk  
+   - Per-drug dosage evaluation  
+   - Per-pair ML confidence  
 
 ---
 
