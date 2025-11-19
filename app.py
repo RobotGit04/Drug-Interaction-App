@@ -8,6 +8,9 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime
 
+import os
+print("FILES:", os.listdir(), "MODELS:", os.listdir("models"), "DATA:", os.listdir("data"))
+
 app = Flask(__name__)
 app.secret_key = "cloud-safe-key"
 
