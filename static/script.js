@@ -1,143 +1,156 @@
+// static/script.js
 document.addEventListener("DOMContentLoaded", () => {
-    const drugContainer = document.getElementById("drug-list-container");
-    const addBtn = document.getElementById("add-drug");
-    const removeBtn = document.getElementById("remove-drug");
-    const predictBtn = document.getElementById("predict");
-    const resultsArea = document.getElementById("results-area");
-    const historyArea = document.getElementById("history-area");
+  const cardsContainer = document.getElementById("cards-container");
+  const addCardBtn = document.getElementById("add-card");
+  const removeCardBtn = document.getElementById("remove-card");
+  const predictBtn = document.getElementById("predict");
+  const pediatricToggle = document.getElementById("pediatric-toggle");
+  const pediatricFields = document.getElementById("pediatric-fields");
+  const historyArea = document.getElementById("history-area");
+  const resultsArea = document.getElementById("results-area");
 
-    function addDrugField() {
-        const div = document.createElement("div");
-        div.className = "input-group mb-2";
-        div.innerHTML = `<input type="text" class="form-control drug-input" placeholder="Drug name">`;
-        drugContainer.appendChild(div);
+  const unitOptions = ["mg","g","mL","mcg","IU"];
+  function createCard(prefill={}) {
+    const div = document.createElement("div");
+    div.className = "card mb-2 p-2 drug-card";
+    div.innerHTML = `
+      <div class="row g-2">
+        <div class="col-12 col-sm-5">
+          <input type="text" class="form-control drug-name" placeholder="Drug name" value="${prefill.name||""}">
+        </div>
+        <div class="col-12 col-sm-2">
+          <input type="number" class="form-control drug-dose" placeholder="Dose" value="${prefill.dose||""}" step="0.1" min="0">
+        </div>
+        <div class="col-12 col-sm-2">
+          <select class="form-select drug-unit">${unitOptions.map(u=>`<option value="${u}">${u}</option>`).join("")}</select>
+        </div>
+        <div class="col-12 col-sm-2">
+          <input type="number" class="form-control drug-freq" placeholder="freq/day" value="${prefill.freq||1}" min="0" step="0.1">
+        </div>
+        <div class="col-12 col-sm-1">
+          <select class="form-select drug-route">
+            <option value="oral">oral</option><option value="iv">iv</option><option value="topical">topical</option>
+          </select>
+        </div>
+      </div>
+      <div class="small text-muted mt-1 card-note"></div>
+    `;
+    cardsContainer.appendChild(div);
+    return div;
+  }
+
+  // start with two cards
+  createCard(); createCard();
+
+  addCardBtn.addEventListener("click", ()=> createCard());
+  removeCardBtn.addEventListener("click", ()=>{
+    const cards = document.querySelectorAll(".drug-card");
+    if (cards.length > 1) cards[cards.length-1].remove();
+  });
+
+  pediatricToggle.addEventListener("change", (e)=>{
+    pediatricFields.style.display = e.target.checked ? "block" : "none";
+  });
+
+  async function loadHistory(){
+    const res = await fetch("/history");
+    const h = await res.json();
+    if(!h || h.length===0){
+      historyArea.innerHTML = "<div class='text-muted small'>No recent checks</div>"; return;
+    }
+    historyArea.innerHTML = h.slice(0,6).map(item=>{
+      return `<div class="mb-1"><strong>${item.drugs.join(", ")}</strong><br><small class="text-muted">${item.summary.level} (${(item.summary.combined_score*100).toFixed(1)}%)</small></div>`;
+    }).join("");
+  }
+
+  predictBtn.addEventListener("click", async ()=>{
+    resultsArea.innerHTML = "<div class='p-3 text-center'>Analyzing...</div>";
+    const cards = document.querySelectorAll(".drug-card");
+    const drugs = Array.from(cards).map(c=>{
+      const name = c.querySelector(".drug-name").value.trim();
+      const dose = c.querySelector(".drug-dose").value;
+      const unit = c.querySelector(".drug-unit").value;
+      const freq = c.querySelector(".drug-freq").value;
+      const route = c.querySelector(".drug-route").value;
+      return {name, dose, unit, freq, route};
+    }).filter(x=>x.name);
+
+    const is_pediatric = pediatricToggle.checked;
+    const age = document.getElementById("patient-age") ? document.getElementById("patient-age").value : null;
+    const weight_kg = document.getElementById("patient-weight") ? document.getElementById("patient-weight").value : null;
+    if (is_pediatric && (!weight_kg || Number(weight_kg)<=0)) {
+      alert("Pediatric mode requires patient weight (kg)."); return;
     }
 
-    function removeDrugField() {
-        if (drugContainer.children.length > 1) {
-            drugContainer.removeChild(drugContainer.lastElementChild);
-        }
+    if (drugs.length < 2) { alert("Enter at least two drugs"); return; }
+
+    const resp = await fetch("/predict", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({drugs, is_pediatric, age, weight_kg})
+    });
+    if (!resp.ok) {
+      const err = await resp.json();
+      resultsArea.innerHTML = `<div class="alert alert-danger">${err.error || "Server error"}</div>`;
+      return;
     }
+    const data = await resp.json();
+    renderResults(data, drugs);
+    loadHistory();
+  });
 
-    addBtn.addEventListener("click", addDrugField);
-    removeBtn.addEventListener("click", removeDrugField);
+  function renderResults(data, drugs) {
+    resultsArea.innerHTML = "";
+    const s = data.summary;
+    const header = document.createElement("div");
+    header.className = "card mb-3 p-3";
+    header.innerHTML = `<h5>Summary</h5>
+      <div><strong>${s.level}</strong> — ${s.risky_pairs}/${s.total_pairs} risky pairs</div>
+      <div class="small text-muted">Combined score: ${(s.combined_score*100).toFixed(1)}%</div>
+      <div class="mt-2">
+        <button id="dl-csv" class="btn btn-sm btn-outline-secondary me-2">Download CSV</button>
+        <button id="dl-pdf" class="btn btn-sm btn-outline-secondary">Download PDF</button>
+      </div>
+    `;
+    resultsArea.appendChild(header);
 
-    predictBtn.addEventListener("click", async () => {
-        const drugs = Array.from(document.querySelectorAll(".drug-input"))
-            .map(i => i.value.trim())
-            .filter(Boolean);
-
-        if (drugs.length < 2) {
-            alert("Enter at least two drugs!");
-            return;
-        }
-
-        resultsArea.innerHTML = "<div class='text-center p-3'>Loading...</div>";
-
-        const response = await fetch("/predict", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({drugs})
-        });
-
-        const data = await response.json();
-
-        renderResults(data, drugs);
-        loadHistory();
+    data.pairs.forEach(p=>{
+      const card = document.createElement("div");
+      card.className = "card mb-2 p-2";
+      card.innerHTML = `<div class="d-flex justify-content-between">
+          <div><strong>${p.drug1}</strong> + <strong>${p.drug2}</strong></div>
+          <div class="text-end"><span class="badge ${p.risk==='High'?'bg-danger':(p.risk==='Moderate'?'bg-warning text-dark':'bg-success')}">${p.risk}</span></div>
+        </div>
+        <div class="small mt-2">
+          <div>ML prob: ${(p.prob*100).toFixed(2)}% → adjusted: ${(p.prob_adj*100).toFixed(2)}%</div>
+          <div>A: ${p.dose_eval_a ? p.dose_eval_a.comment : "No baseline info"}</div>
+          <div>B: ${p.dose_eval_b ? p.dose_eval_b.comment : "No baseline info"}</div>
+        </div>`;
+      resultsArea.appendChild(card);
     });
 
-    function renderResults(data, drugs) {
-        resultsArea.innerHTML = "";
+    document.getElementById("dl-csv").onclick = async () => {
+      const res = await fetch("/export_csv", {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({pairs: data.pairs})
+      });
+      const blob = await res.blob(); downloadBlob(blob, "ddi_results.csv");
+    };
+    document.getElementById("dl-pdf").onclick = async () => {
+      const res = await fetch("/export_pdf", {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({pairs: data.pairs, summary: data.summary})
+      });
+      const blob = await res.blob(); downloadBlob(blob, "ddi_report.pdf");
+    };
+  }
 
-        const summary = data.summary;
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
 
-        const summaryCard = `
-            <div class="card mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Summary</h5>
-                <span class="badge-risk badge-${summary.color}">
-                    ${summary.level} Risk
-                </span>
-                <p class="mt-2 small">Pairs with risk: ${summary.risky_pairs}/${summary.total_pairs}</p>
-                <p class="small">Combined Score: ${(summary.combined_score * 100).toFixed(1)}%</p>
-
-                <button class="btn btn-sm btn-outline-secondary me-2" id="download-csv">Download CSV</button>
-                <button class="btn btn-sm btn-outline-secondary" id="download-pdf">Download PDF</button>
-              </div>
-            </div>
-        `;
-
-        resultsArea.insertAdjacentHTML("beforeend", summaryCard);
-
-        data.pairs.forEach(p => {
-            const card = `
-                <div class="card result-card">
-                  <div class="card-body">
-                    <h6>${p.drug1} + ${p.drug2}</h6>
-                    <span class="badge-risk badge-${p.label ? "high" : "low"}">
-                        ${p.label ? "Interaction" : "Safe"}
-                    </span>
-
-                    <div class="result-description mt-2">
-                        ${p.found ?
-                            `📌 Known interaction: ${p.description}` :
-                            `Predicted probability: ${(p.prob * 100).toFixed(2)}%`
-                        }
-                    </div>
-                  </div>
-                </div>
-            `;
-            resultsArea.insertAdjacentHTML("beforeend", card);
-        });
-
-        // CSV
-        document.getElementById("download-csv").onclick = async () => {
-            const res = await fetch("/export_csv", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({pairs: data.pairs})
-            });
-            const blob = await res.blob();
-            downloadFile(blob, "results.csv");
-        };
-
-        // PDF
-        document.getElementById("download-pdf").onclick = async () => {
-            const res = await fetch("/export_pdf", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({pairs: data.pairs, summary: summary})
-            });
-            const blob = await res.blob();
-            downloadFile(blob, "results.pdf");
-        };
-    }
-
-    function downloadFile(blob, filename) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    async function loadHistory() {
-        const res = await fetch("/history");
-        const history = await res.json();
-
-        if (!history.length) {
-            historyArea.textContent = "No history yet";
-            return;
-        }
-
-        historyArea.innerHTML = history.map(h => `
-            <div class="border-bottom py-2">
-               <strong>${h.drugs.join(", ")}</strong><br>
-               Risk: ${h.summary.level} (${(h.summary.combined_score * 100).toFixed(1)}%)
-            </div>
-        `).join("");
-    }
-
-    loadHistory();
+  loadHistory();
 });

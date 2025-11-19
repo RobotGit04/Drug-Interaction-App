@@ -1,26 +1,5 @@
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.card {
-    border-radius: 10px;
-}
-
-.badge-risk {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
-.badge-low { background: #28a745; color: #fff; }
-.badge-moderate { background: #ffc107; color: #000; }
-.badge-high { background: #dc3545; color: #fff; }
-
-.result-card {
-    margin-bottom: 15px;
-}
-
-.result-description {
-    font-size: 0.9rem;
-    color: #555;
-}
+body { font-family: "Segoe UI", Arial, sans-serif; }
+.card-note { font-size: 0.85rem; color: #666; }
+.badge-low { background:#28a745; }
+.badge-moderate { background:#ffc107; color:#000; }
+.badge-high { background:#dc3545; }
