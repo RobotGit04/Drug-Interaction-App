@@ -75,40 +75,21 @@ Displayed per pair:
 
 Drug-Interaction-App/
 │
-├── app.py # Flask backend (prediction + PDF/CSV export)
-├── Procfile # Render deployment command
-├── requirements.txt # Python dependencies
+├── app.py                     # Flask backend (API, prediction, PDF/CSV export)
+├── Procfile                   # Render deployment command
+├── requirements.txt           # Python package dependencies
 │
 ├── models/
-│ ├── ddi_model.pkl # Trained Random Forest model
-│ └── tfidf.pkl # TF-IDF vectorizer
+│   ├── ddi_model.pkl          # Trained Random Forest model
+│   └── tfidf.pkl              # TF-IDF vectorizer
 │
 ├── data/
-│ ├── processed.csv # Cleaned interaction dataset
-│ └── dosing_baseline.json # Informational dosage baseline (updated)
+│   ├── processed.csv          # Cleaned interaction dataset
+│   └── dosing_baseline.json   # Informational dosage baseline (no duplicates)
 │
 ├── templates/
-│ └── index.html # Minimalistic UI (Bootstrap)
+│   └── index.html             # Web interface (Bootstrap minimalist UI)
 │
 └── static/
-├── style.css # Centered, clean styling
-└── script.js # UI logic, card builder, renderingDrug-Interaction-App/
-│
-├── app.py # Flask backend (prediction + PDF/CSV export)
-├── Procfile # Render deployment command
-├── requirements.txt # Python dependencies
-│
-├── models/
-│ ├── ddi_model.pkl # Trained Random Forest model
-│ └── tfidf.pkl # TF-IDF vectorizer
-│
-├── data/
-│ ├── processed.csv # Cleaned interaction dataset
-│ └── dosing_baseline.json # Informational dosage baseline (updated)
-│
-├── templates/
-│ └── index.html # Minimalistic UI (Bootstrap)
-│
-└── static/
-├── style.css # Centered, clean styling
-└── script.js # UI logic, card builder, rendering
+    ├── style.css              # Centered, clean styling
+    └── script.js              # UI logic, card builder, result rendering
