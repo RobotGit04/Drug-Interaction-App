@@ -11,63 +11,80 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "cloud-safe-key"
 
-# File paths
+# -------------------------
+# FILE PATHS
+# -------------------------
 MODEL_PATH = "models/ddi_model.pkl"
 VECT_PATH = "models/tfidf.pkl"
-DATA_PATH = "data/processed.csv"
+DATA_PATH = "data/processed.csv"   # Your dataset
 
-# Load trained model
+# -------------------------
+# LOAD MODEL + DATA
+# -------------------------
 model = joblib.load(MODEL_PATH)
 tfidf = joblib.load(VECT_PATH)
 df = pd.read_csv(DATA_PATH)
 
-# Preprocess dataset
 df.columns = [c.strip() for c in df.columns]
 
-# Normalize drug pairs for lookup
+# Confirm actual columns
+# Expected dataset columns:
+#   drug1, drug2, label
+
+# -------------------------
+# NORMALIZE PAIRS FOR LOOKUP
+# -------------------------
 def key_pair(a, b):
     a, b = a.strip().lower(), b.strip().lower()
     return "||".join(sorted([a, b]))
 
+# Build interaction map (NO DESCRIPTIONS in your dataset)
 interaction_map = {}
-for i, row in df.iterrows():
-    k = key_pair(str(row["Drug 1"]), str(row["Drug 2"]))
-    interaction_map[k] = row.get("Interaction Description", "")
+for _, row in df.iterrows():
+    k = key_pair(str(row["drug1"]), str(row["drug2"]))
+    interaction_map[k] = ""      # no descriptions available
 
-# Unique drug list
+# Unique drug list (for autocomplete)
 unique_drugs = sorted(
-    list(set(df["Drug 1"].astype(str)).union(set(df["Drug 2"].astype(str))))
+    list(set(df["drug1"].astype(str)).union(set(df["drug2"].astype(str))))
 )
 
-# Home page
+# -------------------------
+# HOME PAGE
+# -------------------------
 @app.route("/")
 def index():
     return render_template("index.html", drugs=unique_drugs)
 
-# Multi-drug prediction API
+# -------------------------
+# MULTI-DRUG PREDICTION
+# -------------------------
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.json
     drugs = [d.strip() for d in data["drugs"] if d.strip()]
 
     if len(drugs) < 2:
-        return jsonify({"error": "Enter at least 2 drugs"}), 400
+        return jsonify({"error": "Please enter at least two drugs."}), 400
 
     results = []
+
     for a, b in itertools.combinations(drugs, 2):
         k = key_pair(a, b)
-        
-        # Check if pair in dataset
+
+        # Check if pair exists in dataset
         if k in interaction_map:
             prob = 1.0
             label = 1
-            desc = interaction_map[k]
+            desc = ""
             found = True
         else:
+            # ML Prediction
             found = False
             desc = ""
             text = f"Interaction between {a} and {b}"
-            prob = float(model.predict_proba(tfidf.transform([text]))[0][1])
+            vector = tfidf.transform([text])
+            prob = float(model.predict_proba(vector)[0][1])
             label = int(prob > 0.5)
 
         results.append({
@@ -79,7 +96,9 @@ def predict():
             "description": desc
         })
 
-    # Compute risk
+    # -------------------------
+    # RISK CALCULATION
+    # -------------------------
     risky = sum(r["label"] == 1 for r in results)
     total = len(results)
 
@@ -88,11 +107,11 @@ def predict():
     combined = 0.6 * pct_risky + 0.4 * avg_conf
 
     if combined >= 0.7:
-        level, color = "High", "red"
+        level, color = "High", "high"
     elif combined >= 0.4:
-        level, color = "Moderate", "orange"
+        level, color = "Moderate", "moderate"
     else:
-        level, color = "Low", "green"
+        level, color = "Low", "low"
 
     summary = {
         "total_pairs": total,
@@ -104,32 +123,43 @@ def predict():
         "color": color
     }
 
-    # Update session history
+    # Save to session history
     history = session.get("history", [])
     history.insert(0, {"drugs": drugs, "summary": summary})
     session["history"] = history[:20]
 
     return jsonify({"pairs": results, "summary": summary})
 
+
+# -------------------------
+# HISTORY
+# -------------------------
 @app.route("/history")
 def history():
     return jsonify(session.get("history", []))
 
-# CSV export
+
+# -------------------------
+# EXPORT CSV
+# -------------------------
 @app.route("/export_csv", methods=["POST"])
 def export_csv():
     data = request.json["pairs"]
     df_out = pd.DataFrame(data)
-    buf = io.StringIO()
-    df_out.to_csv(buf, index=False)
+    buffer = io.StringIO()
+    df_out.to_csv(buffer, index=False)
+
     return send_file(
-        io.BytesIO(buf.getvalue().encode()),
+        io.BytesIO(buffer.getvalue().encode()),
         mimetype="text/csv",
         as_attachment=True,
-        download_name="results.csv"
+        download_name="interaction_results.csv"
     )
 
-# PDF export
+
+# -------------------------
+# EXPORT PDF
+# -------------------------
 @app.route("/export_pdf", methods=["POST"])
 def export_pdf():
     data = request.json
@@ -152,18 +182,26 @@ def export_pdf():
     y -= 20
 
     for p in pairs:
-        line = f"{p['drug1']} + {p['drug2']} → Prob: {p['prob']:.2f}"
+        line = f"{p['drug1']} + {p['drug2']}  →  Prob: {p['prob']:.2f}"
         c.drawString(50, y, line)
         y -= 15
-        if y < 100:
+        if y < 80:
             c.showPage()
             y = 750
 
     c.save()
     buffer.seek(0)
 
-    return send_file(buffer, mimetype="application/pdf",
-                     as_attachment=True, download_name="results.pdf")
+    return send_file(
+        buffer,
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name="interaction_report.pdf"
+    )
 
+
+# -------------------------
+# RENDER START
+# -------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
