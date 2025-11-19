@@ -1,11 +1,28 @@
 body {
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f7f8fa;
 }
 
 .card {
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 input, select {
   border-radius: 6px !important;
 }
+
+/* small badges for reason labels */
+.badge-reason {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.badge-info { background:#e7f1ff; color:#0d6efd; border:1px solid #cfe0ff; }
+.badge-warning { background:#fff4e5; color:#d97706; border:1px solid #ffe6c7; }
+.badge-danger  { background:#ffe9ec; color:#c82333; border:1px solid #ffd7dd; }
+
+/* make the column headings visible and spaced */
+#column-headings { padding: 6px 10px; border-radius: 6px; background: #fafafa; border: 1px solid #eee; }

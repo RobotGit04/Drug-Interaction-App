@@ -1,70 +1,75 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Drug Interaction Predictor (Dosage-aware)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drug Interaction Predictor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
- <body class="bg-light">
+  <body class="bg-light">
+    <nav class="navbar navbar-light bg-white shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <h3 class="my-2">Drug Interaction Predictor</h3>
+        <span class="text-muted small align-self-center">Informational only</span>
+      </div>
+    </nav>
 
-  <nav class="navbar navbar-light bg-white shadow-sm">
-    <div class="container d-flex justify-content-between">
-      <h3 class="my-2">Drug Interaction Predictor</h3>
-      <span class="text-muted small align-self-center">Informational only</span>
-    </div>
-  </nav>
+    <div class="container d-flex justify-content-center">
+      <div class="col-12 col-lg-10 col-md-10 mt-4">
 
-  <div class="container d-flex justify-content-center">
-    <div class="col-lg-8 col-md-10 mt-4">
+        <!-- Main Input Card -->
+        <div class="card shadow-sm mb-4 p-4">
+          <h4 class="text-center mb-1">Enter Drugs</h4>
+          <p class="text-muted text-center mb-3">Add drugs, specify dose, units, frequency, and route.</p>
 
-      <!-- Main Input Card -->
-      <div class="card shadow-sm mb-4 p-4">
-        <h4 class="text-center mb-1">Enter Drugs</h4>
-        <p class="text-muted text-center mb-3">Add drugs, specify dose, units, frequency, and route.</p>
+          <div class="d-flex justify-content-center gap-2 mb-3">
+            <button id="add-card" class="btn btn-outline-primary btn-sm">+ Add drug</button>
+            <button id="remove-card" class="btn btn-outline-secondary btn-sm">- Remove</button>
+            <button id="predict" class="btn btn-primary btn-sm">Predict</button>
+          </div>
 
-        <div class="d-flex justify-content-center gap-2 mb-3">
-          <button id="add-card" class="btn btn-outline-primary btn-sm">+ Add drug</button>
-          <button id="remove-card" class="btn btn-outline-secondary btn-sm">- Remove</button>
-          <button id="predict" class="btn btn-primary btn-sm">Predict</button>
-        </div>
+          <div class="form-check form-switch text-center my-3">
+            <input class="form-check-input" type="checkbox" id="pediatric-toggle" />
+            <label class="form-check-label" for="pediatric-toggle">Pediatric patient (requires weight)</label>
+          </div>
 
-        <div class="form-check form-switch text-center my-3">
-          <input class="form-check-input" type="checkbox" id="pediatric-toggle">
-          <label class="form-check-label" for="pediatric-toggle">
-            Pediatric patient (requires weight)
-          </label>
-        </div>
-
-        <div id="pediatric-fields" class="mb-2" style="display:none;">
-          <div class="row">
-            <div class="col-sm-6 mb-2">
-              <input id="patient-age" class="form-control" placeholder="Age (years)" type="number" min="0">
-            </div>
-            <div class="col-sm-6 mb-2">
-              <input id="patient-weight" class="form-control" placeholder="Weight (kg)" type="number" step="0.1" min="0">
+          <div id="pediatric-fields" class="mb-2" style="display:none;">
+            <div class="row">
+              <div class="col-sm-6 mb-2">
+                <input id="patient-age" class="form-control" placeholder="Age (years)" type="number" min="0" />
+              </div>
+              <div class="col-sm-6 mb-2">
+                <input id="patient-weight" class="form-control" placeholder="Weight (kg)" type="number" step="0.1" min="0" />
+              </div>
             </div>
           </div>
+
+          <!-- Column headings (Q1: A) -->
+          <div class="row mb-2 align-items-center fw-bold text-muted small" id="column-headings" style="display:none;">
+            <div class="col-6 col-sm-5">Drug Name</div>
+            <div class="col-6 col-sm-2">Dose</div>
+            <div class="col-6 col-sm-2">Unit</div>
+            <div class="col-6 col-sm-1">Freq</div>
+            <div class="col-6 col-sm-2">Route</div>
+          </div>
+
+          <div id="cards-container"></div>
         </div>
 
-        <div id="cards-container"></div>
+        <!-- History Card -->
+        <div class="card shadow-sm p-3 mb-3">
+          <h5 class="text-center mb-2">History</h5>
+          <div id="history-area" class="small text-muted text-center">No recent checks</div>
+        </div>
+
+        <!-- Summary (unchanged location) -->
+        <div id="results-area" class="mt-4"></div>
+
       </div>
-
-      <!-- History Card -->
-      <div class="card shadow-sm p-3">
-        <h5 class="text-center mb-2">History</h5>
-        <div id="history-area" class="small text-muted text-center">No recent checks</div>
-      </div>
-
-      <!-- Results -->
-      <div id="results-area" class="mt-4"></div>
-
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
 </html>
