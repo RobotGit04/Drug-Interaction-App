@@ -1,5 +1,11 @@
-body { font-family: "Segoe UI", Arial, sans-serif; }
-.card-note { font-size: 0.85rem; color: #666; }
-.badge-low { background:#28a745; }
-.badge-moderate { background:#ffc107; color:#000; }
-.badge-high { background:#dc3545; }
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+input, select {
+  border-radius: 6px !important;
+}
