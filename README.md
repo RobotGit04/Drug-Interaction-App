@@ -73,3 +73,42 @@ Displayed per pair:
 
 ## 📦 Project Structure
 
+Drug-Interaction-App/
+│
+├── app.py # Flask backend (prediction + PDF/CSV export)
+├── Procfile # Render deployment command
+├── requirements.txt # Python dependencies
+│
+├── models/
+│ ├── ddi_model.pkl # Trained Random Forest model
+│ └── tfidf.pkl # TF-IDF vectorizer
+│
+├── data/
+│ ├── processed.csv # Cleaned interaction dataset
+│ └── dosing_baseline.json # Informational dosage baseline (updated)
+│
+├── templates/
+│ └── index.html # Minimalistic UI (Bootstrap)
+│
+└── static/
+├── style.css # Centered, clean styling
+└── script.js # UI logic, card builder, renderingDrug-Interaction-App/
+│
+├── app.py # Flask backend (prediction + PDF/CSV export)
+├── Procfile # Render deployment command
+├── requirements.txt # Python dependencies
+│
+├── models/
+│ ├── ddi_model.pkl # Trained Random Forest model
+│ └── tfidf.pkl # TF-IDF vectorizer
+│
+├── data/
+│ ├── processed.csv # Cleaned interaction dataset
+│ └── dosing_baseline.json # Informational dosage baseline (updated)
+│
+├── templates/
+│ └── index.html # Minimalistic UI (Bootstrap)
+│
+└── static/
+├── style.css # Centered, clean styling
+└── script.js # UI logic, card builder, rendering
